@@ -22,50 +22,65 @@
 
 # ============================================================================>
 
-clear()
+def init():
+	clear()
+	
+	change_hat(Hats.Traffic_Cone)
+
 
 # ============================================================================>
 
-i = 0
+def main():
+	init()
+	
+	i = 0
+	
+	while True:
+		quick_print("Iteration #", i)
+		
+		w = get_world_size()
+		
+		for y in range(w):
+			# NOTE: Make sure trees have enough space between them
+			n = (y % 2)
+
+			for x in range(w):
+				if not can_harvest():
+					pet_the_piggy()
+				
+				harvest()
+	
+				# NOTE: We need to harvest 3 types of plants at once
+				m = (x % 3)
+	
+				if m == 0:
+					plant(Entities.Grass)
+				elif m == 1:
+					if n == 0:
+						plant(Entities.Bush)
+					else:
+						plant(Entities.Tree)
+				else:
+					# NOTE: This cell should always be soil
+					if get_ground_type() == Grounds.Grassland:
+						till()
+					
+					plant(Entities.Carrot)
+					
+				if get_water() < 0.5:
+					quick_print("get_water(): ", get_water())
+	
+					use_item(Items.Water)
+				
+				move(East)
+			
+			move(North)
+			
+		i += 1
+
 
 # ============================================================================>
-
-while True:
-	quick_print("Iteration #", i)
-	
-	n = get_world_size()
-	
-	for y in range(n):
-		for x in range(n):
-			if not can_harvest():
-				do_a_flip()
-			
-			harvest()
-
-			# NOTE: We need to harvest 3 types of plants at once
-			m = (x % 3)
-				
-			if m == 0:
-				plant(Entities.Grass)
-			elif m == 1:
-				plant(Entities.Bush)
-			else:
-				# NOTE: This cell should always be soil
-				if get_ground_type() == Grounds.Grassland:
-					till()
-				
-				plant(Entities.Carrot)
-				
-			if get_water() < 0.5:
-				quick_print("get_water(): ", get_water())
-
-				use_item(Items.Water)
-			
-			move(East)
 		
-		move(North)
-		
-	i += 1
-
+main()
 
 # ============================================================================>
