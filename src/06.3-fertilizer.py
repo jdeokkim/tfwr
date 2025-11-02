@@ -47,8 +47,8 @@ def grow_or_harvest():
 		harvest()
 		
 		return
-	
-	# TODO: ...
+		
+	# use_item(Items.Fertilizer)
 
 
 # ============================================================================>
