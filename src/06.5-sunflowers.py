@@ -62,7 +62,7 @@ def __plant_sunflower():
 def init():
 	clear()
 	
-	change_hat(Hats.Traffic_Cone)
+	change_hat(Hats.Traffic_Cone_Stack)
 
 	# NOTE: Wait until we're ready to harvest our first plant
 	while not can_harvest():
@@ -73,6 +73,11 @@ def init():
 
 def grow_or_harvest():	
 	if can_harvest():
+		# measured_value = measure()
+		# 
+		# if measured_value:
+		#     quick_print("Got: ", measured_value)
+		
 		harvest()
 		
 		return
@@ -103,7 +108,7 @@ def plant_on(x, y):
 # ============================================================================>
 
 def water_here():
-	if get_water() >= 0.5:
+	if get_water() >= 0.5 or num_items(Items.Water) < 1:
 		return
 	
 	# quick_print("get_water(): ", get_water())
