@@ -30,6 +30,35 @@ WORLD_SIZE = get_world_size()
 
 # ============================================================================>
 
+def __plant_carrot():
+	# NOTE: This cell should always be soil
+	if get_ground_type() == Grounds.Grassland:
+		till()
+	
+	plant(Entities.Carrot)
+
+
+# ============================================================================>
+
+def __plant_pumpkin():
+	# NOTE: This cell should always be soil
+	if get_ground_type() == Grounds.Grassland:
+		till()
+
+	plant(Entities.Pumpkin)
+	
+
+# ============================================================================>
+
+def __plant_sunflower():
+	# NOTE: This cell should always be soil
+	if get_ground_type() == Grounds.Grassland:
+		till()
+
+	plant(Entities.Sunflower)
+	
+# ============================================================================>
+
 def init():
 	clear()
 	
@@ -38,11 +67,11 @@ def init():
 	# NOTE: Wait until we're ready to harvest our first plant
 	while not can_harvest():
 		pet_the_piggy()
-
+	
 
 # ============================================================================>
 
-def grow_or_harvest():
+def grow_or_harvest():	
 	if can_harvest():
 		harvest()
 		
@@ -58,25 +87,17 @@ def plant_on(x, y):
 	x_mod_3, y_mod_2 = (x % 3), (y % 2)
 
 	if x < RESERVED_COLUMN_COUNT:
-		# NOTE: This cell should always be soil
-		if get_ground_type() == Grounds.Grassland:
-			till()
-
-		plant(Entities.Pumpkin)
+		__plant_pumpkin()
 	else:
 		if x_mod_3 == 0:
 			plant(Entities.Grass)
 		elif x_mod_3 == 1:
 			if y_mod_2 == 0:
-				plant(Entities.Bush)
+				__plant_sunflower()
 			else:
 				plant(Entities.Tree)
 		else:
-			# NOTE: This cell should always be soil
-			if get_ground_type() == Grounds.Grassland:
-				till()
-			
-			plant(Entities.Carrot)
+			__plant_carrot()
 
 
 # ============================================================================>
