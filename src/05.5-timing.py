@@ -22,65 +22,54 @@
 
 # ============================================================================>
 
-def init():
-	clear()
-	
-	change_hat(Hats.Traffic_Cone)
-
+clear()
 
 # ============================================================================>
 
-def main():
-	init()
-	
-	i = 0
-	
-	while True:
-		quick_print("Iteration #", i, "->", get_tick_count())
-		
-		w = get_world_size()
-		
-		for y in range(w):
-			# NOTE: Make sure trees have enough space between them
-			n = (y % 2)
+i = 0
 
-			for x in range(w):
-				if not can_harvest():
-					pet_the_piggy()
+# ============================================================================>
+
+while True:
+	quick_print("Iteration #", i, "->", get_tick_count())
+	
+	n = get_world_size()
+	
+	for y in range(n):
+		for x in range(n):
+			if not can_harvest():
+				do_a_flip()
+			
+			harvest()
+
+			# NOTE: We need to harvest 3 types of plants at once
+			m = (x % 3)
 				
-				harvest()
-	
-				# NOTE: We need to harvest 3 types of plants at once
-				m = (x % 3)
-	
-				if m == 0:
-					plant(Entities.Grass)
-				elif m == 1:
-					if n == 0:
-						plant(Entities.Bush)
-					else:
-						plant(Entities.Tree)
+			if m == 0:
+				plant(Entities.Grass)
+			elif m == 1:
+				# NOTE: Make sure trees have enough space between them
+				if (y % 2) == 0:
+					plant(Entities.Bush)
 				else:
-					# NOTE: This cell should always be soil
-					if get_ground_type() == Grounds.Grassland:
-						till()
-					
-					plant(Entities.Carrot)
-					
-				if get_water() < 0.5:
-					quick_print("get_water(): ", get_water())
-	
-					use_item(Items.Water)
+					plant(Entities.Tree)
+			else:
+				# NOTE: This cell should always be soil
+				if get_ground_type() == Grounds.Grassland:
+					till()
 				
-				move(East)
-			
-			move(North)
-			
-		i += 1
+				plant(Entities.Carrot)
+				
+			if get_water() < 0.5:
+				# quick_print("get_water(): ", get_water())
 
-
-# ============================================================================>
+				use_item(Items.Water)
+			
+			move(East)
 		
-main()
+		move(North)
+		
+	i += 1
+
 
 # ============================================================================>

@@ -22,10 +22,72 @@
 
 # ============================================================================>
 
+# The number of columns which should be reserved to grow pumpkins.
+RESERVED_COLUMN_COUNT = 3
+
+# The current size of the farm.
+WORLD_SIZE = get_world_size()
+
+# ============================================================================>
+
 def init():
 	clear()
 	
 	change_hat(Hats.Traffic_Cone)
+
+	# NOTE: Wait until we're ready to harvest our first plant
+	while not can_harvest():
+		pet_the_piggy()
+
+
+# ============================================================================>
+
+def grow_or_harvest():
+	if can_harvest():
+		harvest()
+		
+		return
+		
+	# use_item(Items.Fertilizer)
+
+
+# ============================================================================>
+
+def plant_on(x, y):
+	# NOTE: Make sure trees have enough space between them
+	x_mod_3, y_mod_2 = (x % 3), (y % 2)
+
+	if x < RESERVED_COLUMN_COUNT:
+		# NOTE: This cell should always be soil
+		if get_ground_type() == Grounds.Grassland:
+			till()
+
+		plant(Entities.Pumpkin)
+	else:
+		if x_mod_3 == 0:
+			plant(Entities.Grass)
+		elif x_mod_3 == 1:
+			if y_mod_2 == 0:
+				plant(Entities.Bush)
+			else:
+				plant(Entities.Tree)
+		else:
+			# NOTE: This cell should always be soil
+			if get_ground_type() == Grounds.Grassland:
+				till()
+			
+			plant(Entities.Carrot)
+
+
+# ============================================================================>
+
+def water_here():
+	if get_water() >= 0.5:
+		return
+	
+	# quick_print("get_water(): ", get_water())
+
+	use_item(Items.Water)
 
 
 # ============================================================================>
@@ -38,39 +100,13 @@ def main():
 	while True:
 		quick_print("Iteration #", i, "->", get_tick_count())
 		
-		w = get_world_size()
-		
-		for y in range(w):
-			# NOTE: Make sure trees have enough space between them
-			n = (y % 2)
-
-			for x in range(w):
-				if not can_harvest():
-					pet_the_piggy()
-				
-				harvest()
+		for y in range(WORLD_SIZE):
+			for x in range(WORLD_SIZE):
+				grow_or_harvest()
 	
-				# NOTE: We need to harvest 3 types of plants at once
-				m = (x % 3)
-	
-				if m == 0:
-					plant(Entities.Grass)
-				elif m == 1:
-					if n == 0:
-						plant(Entities.Bush)
-					else:
-						plant(Entities.Tree)
-				else:
-					# NOTE: This cell should always be soil
-					if get_ground_type() == Grounds.Grassland:
-						till()
+				plant_on(x, y)
 					
-					plant(Entities.Carrot)
-					
-				if get_water() < 0.5:
-					quick_print("get_water(): ", get_water())
-	
-					use_item(Items.Water)
+				water_here()
 				
 				move(East)
 			

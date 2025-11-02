@@ -88,7 +88,7 @@ def water_here():
 	if get_water() >= 0.5:
 		return
 	
-	quick_print("get_water(): ", get_water())
+	# quick_print("get_water(): ", get_water())
 
 	use_item(Items.Water)
 
@@ -101,7 +101,7 @@ def main():
 	i = 0
 	
 	while True:
-		quick_print("Iteration #", i)
+		quick_print("Iteration #", i, "->", get_tick_count())
 		
 		for y in range(WORLD_SIZE):
 			for x in range(WORLD_SIZE):
