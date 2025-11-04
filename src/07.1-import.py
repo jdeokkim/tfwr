@@ -22,6 +22,10 @@
 
 # ============================================================================>
 
+import modules.utils as utils
+
+# ============================================================================>
+
 # The number of columns which should be reserved to grow pumpkins.
 RESERVED_COLUMN_COUNT = 4
 
@@ -33,7 +37,7 @@ WORLD_SIZE = get_world_size()
 def init():
 	clear()
 	
-	change_hat(Hats.Traffic_Cone)
+	change_hat(Hats.Traffic_Cone_Stack)
 
 	# NOTE: Wait until we're ready to harvest our first plant
 	while not can_harvest():
@@ -47,43 +51,24 @@ def plant_on(x, y):
 	x_mod_3, y_mod_2 = (x % 3), (y % 2)
 
 	if x < RESERVED_COLUMN_COUNT:
-		# NOTE: This cell should always be soil
-		if get_ground_type() == Grounds.Grassland:
-			till()
-
-		plant(Entities.Pumpkin)
+		utils.plant_pumpkin()
 	else:
 		if x_mod_3 == 0:
-			plant(Entities.Grass)
+			utils.plant_grass()
 		elif x_mod_3 == 1:
 			if y_mod_2 == 0:
-				plant(Entities.Bush)
+				utils.plant_sunflower()
 			else:
-				plant(Entities.Tree)
+				utils.plant_tree()
 		else:
-			# NOTE: This cell should always be soil
-			if get_ground_type() == Grounds.Grassland:
-				till()
-			
-			plant(Entities.Carrot)
+			utils.plant_carrot()
 
 	use_item(Items.Fertilizer)
 
 
 # ============================================================================>
-
-def water_here():
-	if get_water() >= 0.5:
-		return
-	
-	# quick_print("get_water(): ", get_water())
-
-	use_item(Items.Water)
-
-
-# ============================================================================>
-
-def main():
+		
+if __name__ == "__main__":
 	init()
 	
 	i = 0
@@ -92,23 +77,18 @@ def main():
 		quick_print("Iteration #", i, "->", get_tick_count())
 		
 		for y in range(WORLD_SIZE):
-			for x in range(WORLD_SIZE):
+			for x in range(WORLD_SIZE):	
 				if can_harvest():
 					harvest()
 	
 					plant_on(x, y)
 					
-				water_here()
+				utils.water()
 				
 				move(East)
 			
 			move(North)
 			
 		i += 1
-
-
-# ============================================================================>
-		
-main()
 
 # ============================================================================>

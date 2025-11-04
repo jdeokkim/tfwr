@@ -42,17 +42,6 @@ def init():
 
 # ============================================================================>
 
-def grow_or_harvest():
-	if can_harvest():
-		harvest()
-		
-		return
-		
-	# use_item(Items.Fertilizer)
-
-
-# ============================================================================>
-
 def plant_on(x, y):
 	# NOTE: We need to harvest 3 types of plants at once
 	x_mod_3 = (x % 3)
@@ -81,6 +70,8 @@ def plant_on(x, y):
 			
 			plant(Entities.Carrot)
 
+	use_item(Items.Fertilizer)
+
 
 # ============================================================================>
 
@@ -105,7 +96,8 @@ def main():
 		
 		for y in range(WORLD_SIZE):
 			for x in range(WORLD_SIZE):
-				grow_or_harvest()
+				if can_harvest():
+					harvest()
 	
 				plant_on(x, y)
 					

@@ -67,22 +67,6 @@ def init():
 	# NOTE: Wait until we're ready to harvest our first plant
 	while not can_harvest():
 		pet_the_piggy()
-	
-
-# ============================================================================>
-
-def grow_or_harvest():	
-	if can_harvest():
-		# measured_value = measure()
-		# 
-		# if measured_value:
-		#     quick_print("Got: ", measured_value)
-		
-		harvest()
-		
-		return
-		
-	# use_item(Items.Fertilizer)
 
 
 # ============================================================================>
@@ -103,6 +87,8 @@ def plant_on(x, y):
 				plant(Entities.Tree)
 		else:
 			__plant_carrot()
+
+	use_item(Items.Fertilizer)
 
 
 # ============================================================================>
@@ -128,9 +114,10 @@ def main():
 		
 		for y in range(WORLD_SIZE):
 			for x in range(WORLD_SIZE):
-				grow_or_harvest()
+				if can_harvest():
+					harvest()
 	
-				plant_on(x, y)
+					plant_on(x, y)
 					
 				water_here()
 				
